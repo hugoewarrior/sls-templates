@@ -1,0 +1,30 @@
+
+
+#Template to deploy a NodeJS Application to Serverless
+#This template will deploy a lambda function after the the project is build
+service: template-service-name
+
+plugins:
+  - serverless-offline
+
+#This template use a excludes package of configuration where Docker container info is saved 
+package:
+  exclude:
+    - local_dev/**
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage}
+  region: ${opt:region}
+
+functions:
+  main:
+    handler: dist/serverless.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: "{proxy+}"
